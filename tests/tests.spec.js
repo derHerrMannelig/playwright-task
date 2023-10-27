@@ -4,6 +4,7 @@ import { MainPage } from '../pages/page.js';
 const { faker } = require('@faker-js/faker');
 const randomLogin = faker.internet.userName();
 const randomPassword = faker.internet.password();
+const randomQuery = faker.word.words(2);
 const testData = JSON.parse(JSON.stringify(require('../data/test-data.json')));
 
 test.beforeEach(async ({ page }) => {
@@ -34,4 +35,14 @@ test('login error with invalid credentials', async ({ page }) => {
   await expect(page).toHaveURL('/login');
   await expect(await mainPage.getLoginError()).toBeVisible();
   await expect(await mainPage.getLoginError()).toHaveText('Invalid user or password');
+});
+
+test('search with random query', async ({ page }) => {
+  const mainPage = new MainPage(page);
+  await mainPage.fillNavSearch(randomQuery);
+  await expect(await mainPage.getNavSearch()).toHaveValue(randomQuery);
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(new RegExp('/projects/redmine/search'));
+  await expect(await mainPage.getMainSearch()).toHaveValue(randomQuery);
+  await expect(await mainPage.getSearchResults()).toBeAttached();
 });
