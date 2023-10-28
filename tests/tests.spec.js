@@ -46,3 +46,15 @@ test('search with random query', async ({ page }) => {
   await expect(await mainPage.getMainSearch()).toHaveValue(randomQuery);
   await expect(await mainPage.getSearchResults()).toBeAttached();
 });
+
+test('registration requirements', async ({ page }) => {
+  const mainPage = new MainPage(page);
+  await mainPage.clickRegisterButton();
+  await expect(page).toHaveURL('/account/register');
+  for (const asterisk of (await mainPage.getAsterisks())) {
+    await expect(asterisk).toBeVisible();
+  };
+  await mainPage.clickRegisterSubmit();
+  await expect(page).toHaveURL('/account/register');
+  await expect(await mainPage.getRegisterError()).toBeVisible();
+});
