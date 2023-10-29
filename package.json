@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npx playwright install",
+    "postinstall": "npx playwright install && npx playwright install-deps",
     "test": "npx playwright test && allure generate allure-results -o allure-report --clean && allure open allure-report"
   },
   "keywords": [],
