@@ -31,7 +31,9 @@ jobs:
         continue-on-error: true
         run: git clone --branch gh-pages --single-branch --depth 1 https://github.com/${{ github.repository }} allure-history
       - name: Generate Allure Report
-        run: node_modules/.bin/allure generate allure-results -o allure-report --clean
+        run: |
+          npm install -g allure-commandline
+          allure generate allure-results -o allure-report --clean
   deploy-allure-report:
     runs-on: windows-latest
     needs: generate-allure-report
