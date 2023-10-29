@@ -10,6 +10,16 @@ const randomSurname = faker.person.lastName();
 const randomQuery = faker.word.words(2);
 const testData = JSON.parse(JSON.stringify(require('../data/test-data.json')));
 
+let context;
+
+test.beforeAll(async ({ browser }) => {
+  context = await browser.newContext({ ignoreHTTPSErrors: true });
+});
+
+test.afterAll(async () => {
+  await context.close();
+});
+
 test.beforeEach(async ({ page }) => {
   await page.goto('');
 });
