@@ -1,6 +1,7 @@
 {
     "user": {
         "username": "sampleText",
-        "password": "04510451"
+        "password": "04510451",
+        "email": "ordinarytestuser@proton.me"
     }
 }

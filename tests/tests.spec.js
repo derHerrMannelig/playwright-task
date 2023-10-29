@@ -4,6 +4,7 @@ import { MainPage } from '../pages/page.js';
 const { faker } = require('@faker-js/faker');
 const randomLogin = faker.internet.userName();
 const randomPassword = faker.internet.password();
+const randomEmail = faker.internet.email();
 const randomQuery = faker.word.words(2);
 const testData = JSON.parse(JSON.stringify(require('../data/test-data.json')));
 
@@ -33,8 +34,8 @@ test('login error with invalid credentials', async ({ page }) => {
   await expect(await mainPage.getPassword()).toHaveValue(randomPassword);
   await mainPage.clickLoginSubmit();
   await expect(page).toHaveURL('/login');
-  await expect(await mainPage.getLoginError()).toBeVisible();
-  await expect(await mainPage.getLoginError()).toHaveText('Invalid user or password');
+  await expect(await mainPage.getFlashError()).toBeVisible();
+  await expect(await mainPage.getFlashError()).toHaveText('Invalid user or password');
 });
 
 test('search with random query', async ({ page }) => {
@@ -57,4 +58,24 @@ test('registration requirements', async ({ page }) => {
   await mainPage.clickRegisterSubmit();
   await expect(page).toHaveURL('/account/register');
   await expect(await mainPage.getRegisterError()).toBeVisible();
+});
+
+test('password reset', async ({ page }) => {
+  const mainPage = new MainPage(page);
+  await mainPage.clickSignInButton();
+  await expect(page).toHaveURL('/login');
+  await mainPage.clickLostPasswordButton();
+  await expect(page).toHaveURL('/account/lost_password');
+  await mainPage.fillReset(randomEmail);
+  await expect(await mainPage.getResetEmail()).toHaveValue(randomEmail);
+  await mainPage.clickResetSubmit();
+  await expect(page).toHaveURL('/account/lost_password');
+  await expect(await mainPage.getFlashError()).toBeVisible();
+  await expect(await mainPage.getFlashError()).toHaveText('Unknown user.');
+  await mainPage.fillReset(testData.user.email);
+  await expect(await mainPage.getResetEmail()).toHaveValue(testData.user.email);
+  await mainPage.clickResetSubmit();
+  await expect(page).toHaveURL('/login');
+  await expect(await mainPage.getFlashNotice()).toBeVisible();
+  await expect(await mainPage.getFlashNotice()).toHaveText('An email with instructions to choose a new password has been sent to you.');
 });
