@@ -6,7 +6,7 @@ on:
     branches: [ main, tests ]
 jobs:
   run-tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -16,16 +16,14 @@ jobs:
           node-version: 18
       - name: Install Java 8
         run: |
-          sudo apt-get update
-          sudo apt-get install openjdk-8-jdk
-          echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> $GITHUB_ENV
-          echo 'export PATH=$JAVA_HOME/bin:$PATH' >> $GITHUB_ENV
+          choco install openjdk8
+          shell: powershell
       - name: Install all dependencies
         run: npm install
       - name: Run Playwright tests
         run: npx playwright test
   generate-allure-report:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: run-tests
     steps:
       - name: Checkout code
@@ -37,7 +35,7 @@ jobs:
       - name: Generate Allure Report
         run: allure generate allure-results -o allure-report --clean
   deploy-allure-report:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: generate-allure-report
     steps:
       - name: Checkout code
