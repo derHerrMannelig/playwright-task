@@ -15,9 +15,7 @@ jobs:
         with:
           node-version: 18
       - name: Install Java 8
-        run: |
-          choco install openjdk8
-          shell: powershell
+        run: choco install openjdk8
       - name: Install all dependencies
         run: npm install
       - name: Run Playwright tests
