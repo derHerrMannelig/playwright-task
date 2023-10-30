@@ -1,0 +1,56 @@
+name: Playwright Pipeline
+on:
+  push:
+    branches: pipeline
+jobs:
+  run-tests:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Java 8
+        run: choco install openjdk8
+      - name: Install all dependencies
+        run: npm install
+      - name: Run Playwright tests
+        run: npx playwright test
+      - name: Store Allure results
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 1
+  generate-allure-report:
+    runs-on: windows-latest
+    needs: run-tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+      - name: Generate Allure Report
+        run: |
+          npm install -g allure-commandline
+          allure generate allure-results -o allure-report --clean
+      - name: Store generated report
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report
+          retention-days: 1
+  deploy-to-gh-pages:
+    runs-on: windows-latest
+    needs: generate-allure-report
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
