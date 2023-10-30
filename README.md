@@ -2,9 +2,10 @@
 ## Summary
 This is repository for Playwright framework task.  
 **Note: this is main branch.**  
-GitHub Actions pipeline development is in **tests** branch.  
+**GitHub Actions** pipeline is in **pipeline** branch.  
 [Tested website](https://www.redmine.org/)  
 [Test cases list](https://docs.google.com/spreadsheets/d/1tQUHYm8qZlDlgfHZQV9649E_RFUsXcv7ePItFoNLW3g/edit?usp=sharing)  
+[Allure report deploy](https://derherrmannelig.github.io/playwright-task/index.html)  
 ## Requirements
 [Node LTS](https://nodejs.org/) (18.14.2 or higher)  
 [Java](https://www.oracle.com/java/technologies/downloads/#java8) (8 or higher)  
