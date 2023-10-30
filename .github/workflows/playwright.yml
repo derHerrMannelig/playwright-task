@@ -11,11 +11,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Node.js
         uses: actions/setup-node@v3
-        with:
-          node-version: 18
       - name: Install Java 8
         run: choco install openjdk8
       - name: Install all dependencies
@@ -33,13 +31,13 @@ jobs:
     needs: run-tests
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Download artifacts
         uses: actions/download-artifact@v3
+      - name: Install Allure command line
+        run: npm install -g allure-commandline
       - name: Generate Allure Report
-        run: |
-          npm install -g allure-commandline
-          allure generate allure-results -o allure-report --clean
+        run:  allure generate allure-results -o allure-report --clean
       - name: Store generated report
         uses: actions/upload-artifact@v3
         with:
@@ -60,6 +58,7 @@ jobs:
 #          publish_dir: allure-report
     runs-on: windows-latest
     needs: generate-allure-report
+    name: Report publication
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v3
