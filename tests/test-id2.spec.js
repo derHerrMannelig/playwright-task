@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { MainPage } from '../pages/page.js';
+import { MainPage } from '../pages/main-page.js';
+import { LoginPage } from '../pages/login-page.js';
 
 const { faker } = require('@faker-js/faker');
 const randomLogin = faker.internet.userName();
@@ -11,13 +12,14 @@ test.beforeEach(async ({ page }) => {
 
 test('login error with invalid credentials', async ({ page }) => {
   const mainPage = new MainPage(page);
+  const loginPage = new LoginPage(page);
   await mainPage.clickSignInButton();
   await expect(page).toHaveURL('/login');
-  await mainPage.fillCredentials(randomLogin, randomPassword);
-  await expect(await mainPage.getLogin()).toHaveValue(randomLogin);
-  await expect(await mainPage.getPassword()).toHaveValue(randomPassword);
-  await mainPage.clickLoginSubmit();
+  await loginPage.fillCredentials(randomLogin, randomPassword);
+  await expect(await loginPage.getLogin()).toHaveValue(randomLogin);
+  await expect(await loginPage.getPassword()).toHaveValue(randomPassword);
+  await loginPage.clickLoginSubmit();
   await expect(page).toHaveURL('/login');
-  await expect(await mainPage.getFlashError()).toBeVisible();
-  await expect(await mainPage.getFlashError()).toHaveText('Invalid user or password');
+  await expect(await loginPage.getFlashError()).toBeVisible();
+  await expect(await loginPage.getFlashError()).toHaveText('Invalid user or password');
 });
