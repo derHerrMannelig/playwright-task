@@ -4,7 +4,7 @@ on:
     branches: pipeline
 permissions:
   id-token: write
-  contents: read
+  contents: write
   pages: write
 jobs:
   run-tests:
