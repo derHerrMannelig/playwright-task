@@ -1,18 +1,21 @@
-import { test, expect } from '@playwright/test';
-import { MainPage } from '../pages/main-page.js';
-import { LoginPage } from '../pages/login-page.js';
+const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../pages/main-page.js');
+const { LoginPage } = require('../pages/login-page.js');
 
 const { faker } = require('@faker-js/faker');
 const randomEmail = faker.internet.email();
 const testData = JSON.parse(JSON.stringify(require('../data/test-data.json')));
 
+let mainPage;
+let loginPage;
+
 test.beforeEach(async ({ page }) => {
-  await page.goto('');
+  mainPage = new MainPage(page);
+  loginPage = new LoginPage(page);
+  await mainPage.gotoBaseUrl();
 });
 
-test('password reset at login page', async ({ page }) => {
-  const mainPage = new MainPage(page);
-  const loginPage = new LoginPage(page);
+test('reset password', async ({ page }) => {
   await mainPage.clickSignInButton();
   await expect(page).toHaveURL('/login');
   await loginPage.clickLostPasswordButton();

@@ -1,3 +1,5 @@
+const { Page } = require('./page.js');
+
 const registerLogin = 'input#user_login';
 const registerPassword = 'input#user_password';
 const registerConfirmation = 'input#user_password_confirmation';
@@ -8,45 +10,48 @@ const asterisks = 'span.required';
 const registerSubmit = 'input[type=submit]';
 const registerError = 'div#errorExplanation';
 
-export class RegisterPage {
-  constructor(page){
+class RegisterPage extends Page {
+  constructor(page) {
+    super(page);
     this.page = page;
   }
 
   async getRegisterLogin() {
-    return this.page.locator(registerLogin);
+    return super.getElement(registerLogin);
   }
   async getRegisterPassword() {
-    return this.page.locator(registerPassword);
+    return super.getElement(registerPassword);
   }
   async getRegisterConfirmation() {
-    return this.page.locator(registerConfirmation);
+    return super.getElement(registerConfirmation);
   }
   async getRegisterFirstName() {
-    return this.page.locator(registerFirstName);
+    return super.getElement(registerFirstName);
   }
   async getRegisterLastName() {
-    return this.page.locator(registerLastName);
+    return super.getElement(registerLastName);
   }
   async getRegisterEmail() {
-    return this.page.locator(registerEmail);
+    return super.getElement(registerEmail);
   }
   async getAsterisks() {
-    return this.page.locator(asterisks).all();
+    return (await super.getElement(asterisks)).all();
   }
   async getRegisterError () {
-    return this.page.locator(registerError);
+    return super.getElement(registerError);
   }
 
   async fillRegistrationForm(login, pass, name, surname, mail) {
-    await this.page.locator(registerLogin).fill(login);
-    await this.page.locator(registerPassword).fill(pass);
-    await this.page.locator(registerConfirmation).fill(pass);
-    await this.page.locator(registerFirstName).fill(name);
-    await this.page.locator(registerLastName).fill(surname);
-    await this.page.locator(registerEmail).fill(mail);
+    await (await super.getElement(registerLogin)).fill(login);
+    await (await super.getElement(registerPassword)).fill(pass);
+    await (await super.getElement(registerConfirmation)).fill(pass);
+    await (await super.getElement(registerFirstName)).fill(name);
+    await (await super.getElement(registerLastName)).fill(surname);
+    await (await super.getElement(registerEmail)).fill(mail);
   }
   async clickRegisterSubmit() {
-    await this.page.click(registerSubmit);
+    await super.clickElement(registerSubmit);
   }
 }
+
+module.exports = { RegisterPage };

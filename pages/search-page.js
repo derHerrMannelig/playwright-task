@@ -1,15 +1,20 @@
+const { Page } = require('./page.js');
+
 const mainSearch = 'input#search-input';
 const searchResults = 'dl#search-results';
 
-export class SearchPage {
-  constructor(page){
+class SearchPage extends Page {
+  constructor(page) {
+    super(page);
     this.page = page;
   }
 
   async getMainSearch() {
-    return this.page.locator(mainSearch);
+    return super.getElement(mainSearch);
   }
   async getSearchResults() {
-    return this.page.locator(searchResults);
+    return super.getElement(searchResults);
   }
 }
+
+module.exports = { SearchPage };

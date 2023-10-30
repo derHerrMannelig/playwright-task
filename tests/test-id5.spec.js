@@ -1,15 +1,20 @@
-import { test, expect } from '@playwright/test';
-import { MainPage } from '../pages/main-page.js';
-import { SearchPage } from '../pages/search-page.js';
+const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../pages/main-page.js');
+const { SearchPage } = require('../pages/search-page.js');
 
 const { faker } = require('@faker-js/faker');
 const randomQuery = faker.word.words(2);
 
+let mainPage;
+let searchPage;
+
 test.beforeEach(async ({ page }) => {
-  await page.goto('');
+  mainPage = new MainPage(page);
+  searchPage = new SearchPage(page);
+  await mainPage.gotoBaseUrl();
 });
 
-test('search with random query', async ({ page }) => {
+test('search', async ({ page }) => {
   const mainPage = new MainPage(page);
   const searchPage = new SearchPage(page);
   await mainPage.fillNavSearch(randomQuery);

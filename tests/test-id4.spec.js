@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
-import { MainPage } from '../pages/main-page.js';
-import { LoginPage } from '../pages/login-page.js';
-import { RegisterPage } from '../pages/register-page.js';
+const { test, expect } = require('@playwright/test');
+const { MainPage } = require('../pages/main-page.js');
+const { LoginPage } = require('../pages/login-page.js');
+const { RegisterPage } = require('../pages/register-page.js');
 
 const { faker } = require('@faker-js/faker');
 const randomLogin = faker.internet.userName();
@@ -10,14 +10,18 @@ const randomEmail = faker.internet.email();
 const randomName = faker.person.firstName();
 const randomSurname = faker.person.lastName();
 
+let mainPage;
+let loginPage;
+let registerPage;
+
 test.beforeEach(async ({ page }) => {
-  await page.goto('');
+  mainPage = new MainPage(page);
+  loginPage = new LoginPage(page);
+  registerPage = new RegisterPage(page);
+  await mainPage.gotoBaseUrl();
 });
 
-test('registration testing', async ({ page }) => {
-  const mainPage = new MainPage(page);
-  const loginPage = new LoginPage(page);
-  const registerPage = new RegisterPage(page);
+test('register', async ({ page }) => {
   await mainPage.clickRegisterButton();
   await expect(page).toHaveURL('/account/register');
   for (const asterisk of (await registerPage.getAsterisks())) {

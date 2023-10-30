@@ -1,3 +1,5 @@
+const { Page } = require('./page.js');
+
 const login = 'input#username';
 const password = 'input#password';
 const loginSubmit = 'input#login-submit';
@@ -7,41 +9,44 @@ const lostPassword = 'a.lost_password';
 const resetEmail = 'input#mail';
 const resetSubmit = 'input[name="commit"]'
 
-export class LoginPage {
-  constructor(page){
+class LoginPage extends Page {
+  constructor(page) {
+    super(page);
     this.page = page;
   }
 
   async getLogin() {
-    return this.page.locator(login);
+    return super.getElement(login);
   }
   async getPassword() {
-    return this.page.locator(password);
+    return super.getElement(password);
   }
   async getFlashError() {
-    return this.page.locator(flashError);
+    return super.getElement(flashError);
   }
   async getFlashNotice() {
-    return this.page.locator(flashNotice);
+    return super.getElement(flashNotice);
   }
   async getResetEmail() {
-    return this.page.locator(resetEmail);
+    return super.getElement(resetEmail);
   }
 
   async fillCredentials (user, pass) {
-    await this.page.locator(login).fill(user);
-    await this.page.locator(password).fill(pass);
+    await (await super.getElement(login)).fill(user);
+    await (await super.getElement(password)).fill(pass);
   }
   async clickLoginSubmit() {
-    await this.page.click(loginSubmit);
+    await super.clickElement(loginSubmit);
   }
   async clickLostPasswordButton() {
-    await this.page.click(lostPassword);
+    await super.clickElement(lostPassword);
   }
   async fillReset(email) {
-    await this.page.locator(resetEmail).fill(email);
+    await (await super.getElement(resetEmail)).fill(email);
   }
   async clickResetSubmit() {
-    await this.page.click(resetSubmit);
+    await super.clickElement(resetSubmit);
   }
 }
+
+module.exports = { LoginPage };
